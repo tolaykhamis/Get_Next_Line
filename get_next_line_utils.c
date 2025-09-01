@@ -6,7 +6,7 @@
 /*   By: tkhamis <tkhamis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 15:06:04 by tkhamis           #+#    #+#             */
-/*   Updated: 2025/09/01 15:56:44 by tkhamis          ###   ########.fr       */
+/*   Updated: 2025/09/01 17:56:56 by tkhamis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*ft_strnjoin(char *s1, char  *s2, int n )
         len1 = ft_strlen(s1);
     else
         len1 = 0;
-    char *out= malloc(len1 + n + 1);
+    char *out= ft_calloc(sizeof(char),len1 + n + 1);
     
     if(s1)
         ft_memcpy(out, s1, len1);
@@ -60,14 +60,15 @@ char *cut(char *holder)
     while (holder[i] && holder[i] != '\n')
         i++;
 
-    if (holder[i] == '\0'){
+    if (holder[i] == '\0')
+    {
     free(holder);
     return NULL;
     }
     i++; // move past '\n'
     int len = ft_strlen(holder + i);
 
-    char *remaining = malloc(len + 1);
+    char *remaining = ft_calloc(sizeof(char),len + 1);
     if (!remaining)
         return NULL;
 
@@ -88,7 +89,7 @@ char *extract_line(char *holder)
     while (holder[i] && holder[i] != '\n')
         i++;
 
-    char *line = malloc(i + (holder[i] == '\n' ? 2 : 1));
+    char *line = ft_calloc(sizeof(char),i + (holder[i] == '\n' ? 2 : 1));
     if (!line)
         return NULL;
 
