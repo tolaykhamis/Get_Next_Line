@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tkhamis <tkhamis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 15:06:34 by tkhamis           #+#    #+#             */
-/*   Updated: 2025/09/02 13:51:57 by tkhamis          ###   ########.fr       */
+/*   Updated: 2025/09/04 11:36:51 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ size_t	ft_strlen(const char *s);
 char	*extract_line(char *holder);
 char	*cut(char *holder);
 void	*ft_calloc(size_t nmemb, size_t size);
-void	ft_bzero(void *s, size_t n);
 char	*ft_strchr(const char *s, int c);
-char	*ft_strdup(const char *s);
+static char	*read_chunk(int fd, char *holder, char *buf, int *n);
+static char	*reader(int fd, char *holder);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tkhamis <tkhamis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 15:05:30 by tkhamis           #+#    #+#             */
-/*   Updated: 2025/09/02 16:23:47 by tkhamis          ###   ########.fr       */
+/*   Updated: 2025/09/04 11:37:17 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,21 @@ char	*extract_line(char *holder)
 	i = 0;
 	if (!holder || !*holder)
 		return (NULL);
-	while (holder[i] && holder[i] != '\n')
+	while(holder[i] && holder[i] != '\n')
 		i++;
-	line = ft_calloc(i + (holder[i] == '\n' ? 2 : 1), sizeof(char));
-	if (!line)
-		return (NULL);
+	if (holder[i] == '\n')
+    	line = ft_calloc(i + 2, sizeof(char)); 
+	else
+    	line = ft_calloc(i + 1, sizeof(char));
+	if(!line)
+		return NULL;
 	i = 0;
-	while (holder[i] && holder[i] != '\n')
+	while(holder[i] && holder[i] != '\n')
 	{
 		line[i] = holder[i];
 		i++;
 	}
-	if (holder[i] == '\n')
+	if(holder[i] == '\n')
 		line[i++] = '\n';
 	line[i] = '\0';
 	return (line);
@@ -54,8 +57,8 @@ char	*cut(char *holder)
 	}
 	i++;
 	remaining = ft_calloc(ft_strlen(holder + i) + 1, sizeof(char));
-	if (!remaining)
-		return (NULL);
+	if(!remaining)
+		return NULL;	
 	while (holder[i])
 		remaining[j++] = holder[i++];
 	remaining[j] = '\0';
@@ -63,50 +66,59 @@ char	*cut(char *holder)
 	return (remaining);
 }
 
-char	*get_next_line(int fd)
+static char	*reader(int fd, char *holder)
 {
-	static char	*holder[1024];
-	char		*buf;
-	char		*line;
-	int			n;
+	char	*buf;
+	int		n;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
 	buf = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	if (!buf)
 		return (NULL);
-	while (!ft_strchr(holder[fd], '\n'))
+	while (!ft_strchr(holder, '\n'))
 	{
-		n = read(fd, buf, BUFFER_SIZE);
-		if (n < 0)
-		{
-			free(buf);
-			free(holder[fd]);
-			holder[fd] = NULL;
-			return (NULL);
-		}
-		if (n == 0)
+		holder = read_chunk(fd, holder, buf, &n);
+		if (!holder || n <= 0)
 			break ;
-		buf[n] = '\0';
-		holder[fd] = ft_strnjoin(holder[fd], buf, n);
-		if (!holder[fd])
-		{
-			free(buf);
-			return (NULL);
-		}
 	}
 	free(buf);
+	return (holder);
+}
+
+static char	*read_chunk(int fd, char *holder, char *buf, int *n)
+{
+	*n = read(fd, buf, BUFFER_SIZE);
+	if (*n < 0)
+	{
+		free(buf);
+		free(holder);
+		return (NULL);
+	}
+	if (*n == 0)
+		return (holder);
+	buf[*n] = '\0';
+	holder = ft_strnjoin(holder, buf, *n);
+	return (holder);
+}
+
+char	*get_next_line(int fd)
+{
+	static char	*holder[1024];
+	char		*line;
+
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	holder[fd] = reader(fd, holder[fd]);
 	if (!holder[fd] || !*holder[fd])
-    {
-        free(holder[fd]);
-        holder[fd] = NULL;
-        return (NULL);
-    }
+	{
+		free(holder[fd]);
+		holder[fd] = NULL;
+		return (NULL);
+	}
 	line = extract_line(holder[fd]);
 	holder[fd] = cut(holder[fd]);
 	return (line);
 }
-
+	
 int main()
 {
     int fd = open("test.txt",O_RDONLY);

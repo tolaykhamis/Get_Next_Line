@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tkhamis <tkhamis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 15:06:04 by tkhamis           #+#    #+#             */
-/*   Updated: 2025/09/02 16:21:55 by tkhamis          ###   ########.fr       */
+/*   Updated: 2025/09/04 11:41:18 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,25 +22,19 @@ size_t	ft_strlen(const char *s)
 	return (len);
 }
 
-void	ft_bzero(void *s, size_t n)
-{
-	unsigned char	*p;
-
-	p = (unsigned char *)s;
-	while (n--)
-		*p++ = 0;
-}
-
 void	*ft_calloc(size_t nmemb, size_t size)
 {
 	void	*ptr;
 	size_t	total;
+	unsigned char	*p;
 
 	total = nmemb * size;
 	ptr = malloc(total);
 	if (!ptr)
 		return (NULL);
-	ft_bzero(ptr, total);
+	p = (unsigned char *)ptr;
+	while (total--)
+		*p++ = 0;
 	return (ptr);
 }
 
@@ -55,14 +49,15 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	return (dest);
 }
 
-
-
 char	*ft_strnjoin(char *s1, char *s2, int n)
 {
 	int		len1;
 	char	*out;
 
-	len1 = s1 ? ft_strlen(s1) : 0;
+	if (s1)
+    len1 = ft_strlen(s1);
+	else
+    len1 = 0;
 	out = ft_calloc(len1 + n + 1, sizeof(char));
 	if (!out)
 		return (NULL);
