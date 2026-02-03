@@ -45,6 +45,3 @@ https://en.cppreference.com/w/c/language/storage_duration
 - Memory management in C:
 https://en.cppreference.com/w/c/memory
 
-## Use of AI
-
-AI tools were used only for conceptual clarification and documentation assistance, such as understanding buffer management, static storage duration, and improving README clarity.
