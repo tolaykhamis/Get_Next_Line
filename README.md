@@ -2,6 +2,12 @@
 
 # get_next_line
 
+<p align="center">
+  <img src="https://img.shields.io/badge/42-Project-blue" />
+  <img src="https://img.shields.io/badge/Language-C-green" />
+  <img src="https://img.shields.io/badge/Status-Completed-success" />
+</p>
+
 ## Description
 
 **get_next_line** is a foundational project from the 42 curriculum that focuses on **file descriptor handling and buffered input**.  
